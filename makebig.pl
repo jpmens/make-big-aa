@@ -11,7 +11,7 @@ my $ipv6 = '2001:0db8:85a3:0000:0000:8a2e:0370:7334';
 
 my @wl = slurpwords($words);
 my @cnames = (qw(google.com yahoo.de cnn.com powerdns.org isc.org nlnetlabs.nl));
-my $n;
+my $n = 0;
 my %unique;
 
 srand (time ^ $$ ^ unpack "%L*", `ps axww | gzip -f`);
@@ -20,7 +20,7 @@ soa();
 
 glue();
 
-for ($n = 1; $n < 1000000; $n++) {
+while ($n < 1000000) {
 
 	my $domain = @wl[ int(rand($#wl)) ];
 
@@ -29,6 +29,7 @@ for ($n = 1; $n < 1000000; $n++) {
 
 	if (!($n % 14)) {
 		printf "%-40s IN CNAME  %s.\n", $domain, $cnames[ int(rand($#cnames)) ];
+		$n++;
 		next; # no cname and other data...
 	}
 
@@ -59,7 +60,7 @@ for ($n = 1; $n < 1000000; $n++) {
 		printcert();
 	}
 	
-
+	$n++;
 }
 
 print "jp-was-here IN TXT \"end-of-file\"\n";
@@ -84,12 +85,23 @@ sub slurpwords {
 	my @list;
 	my $w;
 
+	# add more words by pushing in -0 -1, ...
 	open(WORDS, $file) or die "Can't open words at $file: $!\n";
 	while (<WORDS>) {
 		next unless (/^[a-z-]+$/i);
 		chomp;
 		$w = lc;
-		push(@list, lc $w);
+		push(@list, $w);
+		push(@list, "$w-0");
+		push(@list, "$w-1");
+		push(@list, "$w-2");
+		push(@list, "$w-3");
+		push(@list, "$w-aa");
+		push(@list, "$w-ab");
+		push(@list, "$w-jp");
+		push(@list, "$w-ah");
+		push(@list, "$w-44");
+		push(@list, "$w-54");
 
 	}
 	close(WORDS);
