@@ -17,13 +17,13 @@ my @cnames = (qw(google.com yahoo.de cnn.com powerdns.org isc.org nlnetlabs.nl))
 my $n = 0;
 my %unique;
 
-my @fortunes = slurp('fortunes');
+my @fortunes = slurp('files/fortunes');
 chomp(@fortunes);
 
 srand (time ^ $$ ^ unpack "%L*", `ps axww | gzip -f`);
 
-print slurp('incl/SOA.in'), "\n";
-print slurp('incl/delegations.in'), "\n";
+print slurp('files/SOA.in'), "\n";
+print slurp('files/delegations.in'), "\n";
 
 
 while ($n < 1000000) {
